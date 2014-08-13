@@ -5,16 +5,14 @@ import com.micky2506.lib.Configuration;
 import com.micky2506.lib.MessageSource;
 import com.micky2506.util.Utils;
 import org.jibble.pircbot.Colors;
-import sun.plugin2.message.Message;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 public class CommandInfo implements ICommand
 {
-    private static HashMap<String, String> info = new HashMap<String, String>();
+    private static HashMap<String, String> info = new HashMap<>();
 
     @Override
     public void init()
@@ -35,13 +33,10 @@ public class CommandInfo implements ICommand
     @Override
     public void execute(String executedAlias, String sender, String channel, String[] args, MessageSource messageSource)
     {
-        info.clear();
-        addValuesToInfo();
-
         if (executedAlias.equals("info"))
         {
             String message = "Udaldor's Online Information: ";
-            List<String> infoMessage = new ArrayList<String>(info.size());
+            List<String> infoMessage = new ArrayList<>(info.size());
             for (String infoKey : info.keySet())
             {
                 infoMessage.add(String.format("%s: %s", infoKey, Colors.BLUE + info.get(infoKey) + Colors.NORMAL));
