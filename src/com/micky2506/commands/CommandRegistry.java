@@ -8,14 +8,12 @@ import com.micky2506.util.Utils;
 
 import java.util.*;
 
-public class CommandRegistry
+public class CommandRegistry extends TimerTask
 {
-    private static final int TIME_BETWEEN_COMMANDS = 3; // In seconds
-    private static final int COMMAND_AMOUNT = 3; // In seconds
-    public static HashMap<String, ICommand> commands = new HashMap<String, ICommand>();
+    private static final int MAX_COMMAND_AMOUNT = 1;
+    public static HashMap<String, ICommand> commands = new HashMap<>();
     private static HashMap<String, List<String>> commandAliases = new HashMap<String, List<String>>();
-    private static HashMap<String, Long> lastCommandTimes = new HashMap<String, Long>();
-    private static HashMap<String, Integer> commandAmounts = new HashMap<String, Integer>();
+    private static HashMap<String, Integer> commandAmounts = new HashMap<>();
 
     public static void addAlias(String originalCommand, String alias)
     {
@@ -44,39 +42,22 @@ public class CommandRegistry
         String[] args = message.split("\\s+");
         String commandName = args[0].toLowerCase();
 
-        if (!lastCommandTimes.containsKey(sender))
-        {
-            lastCommandTimes.put(sender, System.currentTimeMillis() - TIME_BETWEEN_COMMANDS*1000);
-        }
-
         if (!commandAmounts.containsKey(sender))
         {
             commandAmounts.put(sender, 0);
         }
 
-        if (System.currentTimeMillis() - lastCommandTimes.get(sender) > TIME_BETWEEN_COMMANDS*1000)
+        if (!Utils.isSpecial(sender, channel))
         {
-            commandAmounts.put(sender, 0);
-            lastCommandTimes.put(sender, System.currentTimeMillis() - TIME_BETWEEN_COMMANDS*1000);
-        }
-
-        if (commandAmounts.get(sender) >= COMMAND_AMOUNT && !Utils.isOP(sender, channel))
-        {
-            commandAmounts.put(sender, 0);
-            Bot.instance.kick(channel, sender, "Too many commands!");
-            return;
-        }
-
-        if (System.currentTimeMillis() - lastCommandTimes.get(sender) < TIME_BETWEEN_COMMANDS*1000 && !Utils.isOP(sender, Configuration.CHANNEL))
-        {
-            Bot.instance.sendNotice(sender, "Please wait " + TIME_BETWEEN_COMMANDS + " seconds between commands.");
-            Bot.instance.sendNotice(sender, "Time left before next command: " + (TIME_BETWEEN_COMMANDS - (System.currentTimeMillis() - lastCommandTimes.get(sender))/1000) + " seconds.");
             commandAmounts.put(sender, commandAmounts.get(sender) + 1);
-            return;
-        }
 
-        commandAmounts.put(sender, commandAmounts.get(sender) + 1);
-        lastCommandTimes.put(sender, System.currentTimeMillis());
+            if (commandAmounts.get(sender) > MAX_COMMAND_AMOUNT)
+            {
+                Bot.notice(sender, Messages.TOO_MANY_COMMANDS);
+                Bot.instance.kick(Configuration.CHANNEL, sender);
+                return;
+            }
+        }
 
         ICommand command = getCommand(commandName);
 
@@ -172,5 +153,15 @@ public class CommandRegistry
     private static List<String> getCommandAliases(ICommand command)
     {
         return commandAliases.get(getCommandName(command));
+    }
+
+    @Override
+    public void run()
+    {
+        for (String sender : commandAmounts.keySet())
+        {
+            if (commandAmounts.get(sender) > 0)
+                commandAmounts.put(sender, commandAmounts.get(sender) - 1);
+        }
     }
 }

@@ -7,6 +7,7 @@ import org.jibble.pircbot.PircBot;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Timer;
 
 public class Bot extends PircBot
 {
@@ -35,13 +36,16 @@ public class Bot extends PircBot
         }
 
         identify(Configuration.NICK_SERV_PASSWORD);
-        this.changeNick("UTron");
+        this.changeNick("DoorBot");
 
         CommandRegistry.registerCommand("rules", new CommandRules());
         CommandRegistry.registerCommand("stream", new CommandStream());
         CommandRegistry.registerCommand("help", new CommandHelp());
         CommandRegistry.registerCommand("alias", new CommandAlias());
         CommandRegistry.registerCommand("info", new CommandInfo());
+
+        Timer timer = new Timer(true);
+        timer.scheduleAtFixedRate(new CommandRegistry(), 0, 2000);
     }
 
     @Override
