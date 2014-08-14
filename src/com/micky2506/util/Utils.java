@@ -86,4 +86,14 @@ public class Utils
         }
         return clonedList;
     }
+
+    public static boolean isGreeting(String message)
+    {
+        if (message.contains("hello")) return true;
+        if (message.contains("o/")) return true;
+        if (message.contains("\\o")) return true;
+        if (message.contains("\\o/")) return true;
+        if (message.contains("hi")) return true;
+        return false;
+    }
 }

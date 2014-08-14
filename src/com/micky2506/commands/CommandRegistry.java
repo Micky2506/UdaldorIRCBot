@@ -22,11 +22,19 @@ public class CommandRegistry extends TimerTask
             aliases.add(alias);
     }
 
+    public static void addAlias(ICommand command, String alias)
+    {
+        List<String> aliases = commandAliases.get(getCommandName(command));
+        if (!aliases.contains(alias))
+            aliases.add(alias);
+    }
+
     public static void addAlias(ICommand command, Set<String> aliases)
     {
+        String commandName = getCommandName(command);
         for (String alias : aliases)
         {
-            addAlias(getCommandName(command), alias);
+            addAlias(commandName, alias);
         }
     }
 

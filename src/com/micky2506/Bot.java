@@ -43,6 +43,7 @@ public class Bot extends PircBot
         CommandRegistry.registerCommand("help", new CommandHelp());
         CommandRegistry.registerCommand("alias", new CommandAlias());
         CommandRegistry.registerCommand("info", new CommandInfo());
+        CommandRegistry.registerCommand("terminate", new CommandTerminate());
 
         Timer timer = new Timer(true);
         timer.scheduleAtFixedRate(new CommandRegistry(), 0, 2000);
@@ -122,12 +123,9 @@ public class Bot extends PircBot
         Bot.instance.sendMessage(target, message);
     }
 
-    public static void message(String target, List<String> messages)
+    public static void express(String target, String message)
     {
-        for (String message : messages)
-        {
-            message(target, message);
-        }
+        Bot.instance.sendAction(target, message);
     }
 }
 

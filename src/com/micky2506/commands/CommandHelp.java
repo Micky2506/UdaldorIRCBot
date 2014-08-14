@@ -60,5 +60,6 @@ public class CommandHelp implements ICommand
     @Override
     public void init()
     {
+        CommandRegistry.addAlias(this, "commands");
     }
 }
