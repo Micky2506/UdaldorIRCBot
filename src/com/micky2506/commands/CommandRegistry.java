@@ -105,7 +105,7 @@ public class CommandRegistry extends TimerTask
         }
         else if (commandName.matches("[\\w\\d]+"))
         {
-            Bot.instance.sendNotice(sender, Messages.NOT_A_COMMAND);
+            Bot.notice(sender, Messages.NOT_A_COMMAND);
         }
     }
 

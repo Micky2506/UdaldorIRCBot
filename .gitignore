@@ -3,3 +3,7 @@ src/META-INF
 src/com/micky2506/lib/Configuration.java
 .idea
 irc-bot-udaldor.iml
+
+UdaldorIRCBot.iws
+UdaldorIRCBot.iml
+UdaldorIRCBot.ipr

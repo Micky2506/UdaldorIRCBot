@@ -99,7 +99,7 @@ public class Bot extends PircBot
     @Override
     protected void onMessage(String channel, String sender, String login, String hostname, String message)
     {
-        if (message.startsWith("!"))
+        if (message.startsWith("!") || message.startsWith("?") || message.startsWith(">"))
         {
             CommandRegistry.executeCommand(message.substring(1), sender, channel, MessageSource.CHANNEL);
         }
